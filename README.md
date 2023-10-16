@@ -203,9 +203,203 @@ $out[31:0] = $op[1] ? ($op[0] ? $quot : $prod)
 ![image](https://github.com/vandhana01/RISC-V/assets/142392052/e75c3b06-a5c6-4a7e-bbde-dd7eaaa23145)
 
 # Pipelined Logic
+- It involves breaking down a complex operation into a series of stages, with each stage executed in parallel. The result is improved throughput, as new data can enter the pipeline before the previous data exits.
+  
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/0c7d9eac-37a3-4da8-bdbf-1a8caa0bc5cd)
 
+- TL Verilog gives us the ability to model this in what we called as timing abstract representation.
+  
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/24f5d2e1-2165-465e-a910-cdb9e27b05a9)
+
+- **system verilog vs TL-verilog**
+- SystemVerilog is a comprehensive and mature language used for both design and verification in the semiconductor industry.
+- TL-Verilog, on the other hand, is a more recent language that simplifies digital design by providing a high-level abstraction and is well-suited for designing high-performance accelerators and dataflow-style designs.
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/898f9d69-f613-4eef-b456-228532d7d329)
+
+- **Retiming**
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/a96eb72b-20eb-4971-947e-46cffe2dc37b)
+
+- Retiming in SystemVerilog is very bug-prone!!!
+1. Without Pipeline
+   
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/6d265660-d568-417f-84b0-7b309f47d4d4)
+
+2. With Pipeline
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/a3655aca-182c-488b-8d3f-ba99a660ca05)
+
+_ **Identifiers and Types**
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/f40d9b84-6297-458b-89ee-2f413d46eb7e)
+
+## Labs
+- Example
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/16f1f346-9571-4889-a600-0959a6083f2a)
+
+- **Counter and Calculator in pipeline**
+- Put Counter and Calculator in stage @1 in pipeline
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/48964ff9-bd31-4192-a65b-8cdd99a0586b)
+
+- The $reset = *reset expression should be moved under the pipeline and pipestage as well
+- ``v
+|calc
+      @0
+         $reset = *reset;
+      @1
+         $val2[31:0] = $rand2[3:0];
+         $val1[31:0] = (>>1$out[31:0]);
+         $sum[31:0] = $val1[31:0] + $val2[31:0];
+         $diff[31:0] = $val1[31:0] - $val2[31:0];
+         $prod[31:0] = $val1[31:0] * $val2[31:0];
+         $quot[31:0] = $val1[31:0] / $val2[31:0];
+         $out[31:0] = $reset ? 32'b0 :
+                      ($op[1] ? ($op[0] ? $quot : $prod)
+                              : ($op[0]? $diff : $sum));
+         $cnt[31:0] = $reset ? 0 : (1 + >>1$cnt);
+``
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/0a9ff7be-def7-46dc-825a-53b0d6b69276)
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/bce00593-28e8-41ae-9e88-0fe53a8bc762)
+
+- **2-Cycle Calculator**
+- At high frequency, we might need to calculate every other cycle.
+1. Change alignment of $out (to calculate every other cycle).
+2. Change counter to single-bit (to indicate every other cycle).
+3. Connect $valid (to clear alternate outputs).
+4. Retime mux to @2 (to ease timing; no functional change).
+5. Verify behavior in waveform. 
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/dd3e26ca-94a4-4c01-827d-65baa2b1ca37)
+
+ - ``v
+   |calc 
+      @0
+         $reset = *reset;
+      @1  
+         $val1[31:0] = (>>2$out[31:0]);
+         $val2[31:0] = $rand2[3:0];
+         $sum[31:0] = $val1[31:0] + $val2[31:0];
+         $diff[31:0] = $val1[31:0] - $val2[31:0];
+         $prod[31:0] = $val1[31:0] * $val2[31:0];
+         $quot[31:0] = $val1[31:0] / $val2[31:0];
+         $cnt[0] = $reset ? 0 : (1 + >>1$cnt);
+      @2
+         $valid[0] = $cnt;
+         $rst = ~$valid[0] || $reset;
+         $out[31:0] = $rst ? 32'b0 :
+                      ($op[1] ? ($op[0] ? $quot : $prod)
+                              : ($op[0]? $diff : $sum));
+   
+``
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/0e186445-4f86-4163-b789-45e74b608780)
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/fcfd3bbe-0fa0-4cb7-bd08-4680ebc22d74)
 
 # Validity
+- Validity provides:
+  - Easier debug
+  - Cleaner design
+  - Better error checking
+  - Automated clock gating
+- **CLOCK GATING**
+- Motivation:
+  - Clock signals are distributed to EVERY flip-flop.
+  - Clocks toggle twice per cycle.
+  - This consumes power.
+- Clock gating avoids toggling clock signals.
+- TL-Verilog can produce fine-grained gating (or enables).
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/534d1f0e-6194-425f-9559-52de4c345d17)
+
+## Labs
+1. **Distance accumulator**
+
+- ``v
+|calc
+      @1
+         $reset = *reset;
+      ?$valid
+         @1
+            $aa_sq[31:0] = $aa[3:0] ** 2;
+            $bb_sq[31:0] = $bb[3:0] ** 2;
+         @2
+            $cc_sq[31:0] = $aa_sq + $bb_sq;
+         @3
+            $cc[31:0] = sqrt($cc_sq);
+      @4
+         $tot_dist[63:0] = 
+                   $reset ? '0 :
+                   $valid ? >>1$tot_dist + $cc :
+                            >>1$tot_dist;
+``
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/e430b637-57c9-4a7d-b3f7-8f51571aa585)
+
+2. **2-Cycle Calculator with Validity** 
+- ``v
+  |calc
+      @0
+         $reset = *reset;
+      @1
+         $valid = $reset ? 1'b0 : >>1$valid + 1'b1;
+         $val2[31:0] = $rand2[3:0];
+         $val1[31:0] = >>2$out;
+         $reset_or_valid = $valid || $reset;
+      ?$reset_or_valid
+         @1
+            $sum[31:0] = $val1[31:0] + $val2[31:0];
+            $diff[31:0] = $val1[31:0] - $val2[31:0];
+            $prod[31:0] = $val1[31:0] * $val2[31:0];
+            $quot[31:0] = $val1[31:0] / $val2[31:0];
+         @2 
+            $out[31:0] = $reset ? 32'b0 : 
+                        ($op[1:0] == 2'b00) ? $sum :
+                        ($op[1:0] == 2'b01) ? $diff :
+                        ($op[1:0] == 2'b10) ? $prod : $quot;
+``
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/b743f93d-d1fa-4657-9fc3-5dac49407f27)
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/898c7c6a-9023-4c8a-ac0d-4628f545113c)
+
+3. **Calculator with Single-Value Memory**
+- Calculators support “mem” and “recall”, to remember and recall a value
+- ``v
+   |calc
+      @0
+         $reset = *reset;
+      @1
+         $valid = $reset ? 1'b0 : >>1$valid + 1'b1;
+         $val2[31:0] = $rand2[3:0];
+         $val1[31:0] = >>2$out;
+         $reset_or_valid = $valid || $reset;
+      ?$reset_or_valid
+         @1
+            $sum[31:0] = $val1[31:0] + $val2[31:0];
+            $diff[31:0] = $val1[31:0] - $val2[31:0];
+            $prod[31:0] = $val1[31:0] * $val2[31:0];
+            $quot[31:0] = $val1[31:0] / $val2[31:0];
+         @2 
+            $mem[31:0] = $reset ? 32'b0 : 
+                         ($op[2:0] == 3'b101) ? $val1 :
+                                              >>2$mem;
+            $out[31:0] = $reset ? 32'b0 : 
+                        ($op[2:0] == 3'b000) ? $sum :
+                        ($op[2:0] == 3'b001) ? $diff :
+                        ($op[2:0] == 3'b010) ? $prod : 
+                        ($op[2:0] == 3'b011) ? $quot : 
+                        ($op[2:0] == 3'b100) ? >>2$mem : >>2$out;
+
+``
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/c4f367ec-3742-40c4-8431-c49e05779222)
+
+![image](https://github.com/vandhana01/RISC-V/assets/142392052/b6ae65e8-adc7-4604-b2c7-939b8f2e8223)
+
 
 </details>
 
