@@ -178,6 +178,9 @@ int main(){
 
 <img width="502" alt="image" src="https://github.com/vandhana01/pes_asic_class/assets/142392052/7fef9481-74ef-4fcb-8462-eb0a7dc40cd9">
 
+
+- To acess DAY 1 CODEs : https://github.com/vandhana01/pes_asic_class/tree/main/DAY1
+
 </details>
 
 # DAY 2
@@ -355,6 +358,8 @@ chmod 777 rv32im.sh
 ```
 
 <img width="550" alt="image" src="https://github.com/vandhana01/pes_asic_class/assets/142392052/3c9bb5d2-0247-436e-a666-c45148e03752">
+
+- To access DAY 2 CODEs : https://github.com/vandhana01/pes_asic_class/tree/main/DAY2
 
 </details>
 
@@ -4017,10 +4022,29 @@ _ **Identifiers and Types**
 
 </details>
 
-## Final RISC-V CPU Core implementation
+# Wrap UP 
 
+<details>
+<summary> Final RISC-V CPU Core implementation </summary>
+<br>
+	
+[](https://github.com/vandhana01/RISc-V#links-for-easy-navigaton)
+
+## Final RISC-V CPU Core implementation
+- Makerchip allows you to see the code generated for a RISC-V core in both TL-Verilog and SystemVerilog and visually compare the differences in code size and complexity.
+- TL-Verilog is designed to make hardware design more concise and readable, which often results in a reduction in the amount of code needed to describe a complex hardware design compared to traditional hardware description languages like SystemVerilog.
+
+- CODE: https://github.com/vandhana01/RISC-V/blob/main/final_riscv_core.tlv
+    
 ![image](https://github.com/vandhana01/RISC-V/assets/142392052/86d231f3-4f06-4ee2-97e5-227bc08c0fcd)
 
 ![image](https://github.com/vandhana01/RISC-V/assets/142392052/cac2c257-8701-4f17-bae9-e5e56effd9ac)
 
+
+- Comparing the code for a RISC-V core written in TL-Verilog and SystemVerilog using a tool like Makerchip can indeed show significant code reduction in favor of TL-Verilog.   
+
 ![image](https://github.com/vandhana01/RISC-V/assets/142392052/8d6a5bca-889c-4bbe-beca-c66feb06f65f)
+
+## CONCLUSION
+- When comparing the code for a RISC-V CPU core in TL-Verilog and SystemVerilog using Makerchip platform, you can visually see the significant code reduction achieved with TL-Verilog, making it an attractive option for projects where code simplicity and conciseness are valued. However, the ultimate choice should align with your project's goals and constraints.
+</details>
