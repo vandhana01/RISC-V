@@ -1,4 +1,5 @@
 # RISC-V Based Myth
+## DISCLAIMER : This repo mainly focus on DAY 3,4 and 5
 
 <img width="1100" alt="image" src="https://github.com/vandhana01/pes_asic_class/assets/142392052/2e4c7a2d-b188-403d-9482-a8efac7ceada">
 
@@ -18,6 +19,8 @@ https://github.com/kunalg123/riscv_workshop_collaterals/blob/master/run.sh
 - ./run.sh
 
 # RISC-V
+
+
 <p align="center">
 <img width="550" alt="image" src="https://github.com/vandhana01/RISC-V/assets/142392052/da7f9740-ce99-4cae-88a1-3e8e1df4ef0d">
 </p>
@@ -361,15 +364,7 @@ chmod 777 rv32im.sh
 
 - To access DAY 2 CODEs : https://github.com/vandhana01/pes_asic_class/tree/main/DAY2
 
-</details>
-
-# Day 3
-<details>
-<summary> RTL Design using verilog with SKY130 technology </summary>
-<br>
-
-[](https://github.com/vandhana01/pes_asic_class#links-for-easy-navigaton)
-#
+# RTL Design using verilog with SKY130 technology 
 <details>
 <summary> Introduction to Verilog RTL design and Synthesis</summary>
 <br>
@@ -631,7 +626,7 @@ Synthesizer should be guided to select the flavour of cells that is optimum for 
 </details>
 </details>  
 
-## Day 4
+## part 4
 <details>
 <summary> Timing libs, hierarchical vs flat synthesis and efficient flop coding styles</summary>
 <br>
@@ -965,7 +960,7 @@ Synthesizer should be guided to select the flavour of cells that is optimum for 
 </details> 
 </details>   
 
-## Day 5
+## Part 5
 <details>
 <summary> Combinational and sequential optmizations </summary>
 <br>
@@ -1354,7 +1349,7 @@ Synthesizer should be guided to select the flavour of cells that is optimum for 
 </details> 
 </details>  
 
-## Day 6
+## Part 6
 <details>
 <summary> GLS, blocking vs non-blocking and Synthesis-Simulation mismatch</summary>
 <br>
